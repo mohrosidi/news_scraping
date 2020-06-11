@@ -55,8 +55,7 @@ tanggal <- page %>%
 isi <- page %>%
   html_nodes('.content-text-editor:nth-child(2)') %>%
   html_text() %>%
-  str_replace(".*- ", "") %>%
-  str_replace_all("[\n\r]", " ")
+  str_replace(".*- ", "")
 
 # Membuat Fungsi Untuk Mengekstrak Isi Berita ----
 

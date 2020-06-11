@@ -105,20 +105,54 @@ berita(url)
 
 # Mengambil Tautan Menggunakan RSelenium -----
 
-# start the server and browser(you can use other browsers here)
-rD <- rsDriver(browser=c("chrome"), port = 4445L)
+# Memulai server dan melakukan browsing
+rD <- rsDriver(browser=c("firefox"), port = 4445L)
 
 driver <- rD$client
 
-# navigate to an URL
+# Nagigasi ke halaman URL
 driver$navigate("https://kumparan.com/search/haji%202020/")
 
+# Navigasi ke bagian akhir halaman
+element <- driver$findElement("css", "body")
+flag <- TRUE
+counter <- 0
+
+while(flag){
+  counter <- counter + 1
+  
+  element$sendKeysToElement(list(key="end"))
+  Sys.sleep(runif(1,5,7))
+  
+  if(exists("pagesource")){
+    if(pagesource == driver$getPageSource()[[1]]){
+      flag <- FALSE
+     
+    } else {
+      pagesource <- driver$getPageSource()[[1]]
+    }
+  } else {
+    pagesource <- driver$getPageSource()[[1]]
+  }
+}
 
 
-#close the driver
+# Membaca pagesource yang terambil
+tautan <- read_html(pagesource) %>%
+  html_nodes('a.LabelLinkweb-g6i50g-0.cTbeQX') %>%
+  html_attr('href') %>%
+  unique() %>%
+  .[-matches("^https", vars = .)] %>%
+  .[-1:-15] %>%
+  .[!is.na(.)] %>% 
+  .[-matches("response", vars = .)] %>% 
+  paste0("https://kumparan.com", .)
+
+
+# Menutup driver
 driver$close()
 
-#close the server
+# Menutup server
 rD$server$stop()
 
 # Mengambil Konten Berita dari Tautan ------
