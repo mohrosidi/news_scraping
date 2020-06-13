@@ -12,17 +12,26 @@
 # yang dapat menangani javascript pada website tersebut. Daftar 
 # tautan berita yang telah diambil dengan bantuan RSelenium
 # selanjutnya akan dilakukan scraping menggunakan bantuan rvest.
-# 
+#
+# RSelenium saat ini sudah tidak tersedia di repository CRAN akibat
+# akibat masalah instabilitas. Untuk tetap dapat menggunakannya, kita
+# dapat menginstall RSelenium dari github.
 
 # Import Packages -----
 
 # install.packages("tidyverse")
 # install.packages("furrr")
 # install.packages("RSelenium")
+# install.packages("devtools)
+# devtools::install_github("ropensci/RSelenium")
 library(tidyverse)
 library(rvest)
 library(furrr)
 library(RSelenium)
+
+# Packages pendukung RSelenium
+# devtools::install_github("johndharrison/binman")
+# devtools::install_github("johndharrison/wdman")
 
 plan(multiprocess)
 
@@ -116,10 +125,8 @@ driver$navigate("https://kumparan.com/search/haji%202020/")
 # Navigasi ke bagian akhir halaman
 element <- driver$findElement("css", "body")
 flag <- TRUE
-counter <- 0
 
 while(flag){
-  counter <- counter + 1
   
   element$sendKeysToElement(list(key="end"))
   Sys.sleep(runif(1,5,7))

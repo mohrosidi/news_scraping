@@ -55,7 +55,11 @@ tanggal <- page %>%
 isi <- page %>%
   html_nodes('.content-text-editor:nth-child(2)') %>%
   html_text() %>%
-  str_replace(".*- ", "")
+  str_replace(".*- ", "") %>%
+  str_remove_all("(?<=\\r\\n)(.*?)(?=\\r\\n\\r\\n)") %>%
+  str_remove_all("(?<=\\r\\n)(.*?)(?=\\r\\n\\r\\n)") %>%
+  str_remove_all("Baca juga:") %>%
+  str_remove_all("[\r\n]")
 
 # Membuat Fungsi Untuk Mengekstrak Isi Berita ----
 
@@ -108,8 +112,14 @@ berita <- function(url){
     isi = page %>%
       html_nodes('.content-text-editor:nth-child(2)') %>%
       html_text() %>%
-      str_replace(".*- ", "")%>%
-      str_replace_all("[\n\r]", " ")
+      str_replace(".*- ", "") %>%
+      str_remove_all("(?<=\r\n)(.*?)(?=\r\n\r\n)") %>%
+      str_remove_all("(?<=\r\n)(.*?)(?=\r\n\r\n)") %>%
+      str_remove_all("(?<=\r\n)(.*?)(?=\r\n\r\n)") %>%
+      str_remove_all("(?<=\r\n)(.*?)(?=\r\n\r\n)") %>%
+      str_remove_all("(?<=\r\n)(.*?)(?=\r\n\r\n)") %>%
+      str_remove_all("Baca juga:") %>%
+      str_remove_all("[\r\n]")
     
   )%>%
     mutate(tanggal = case_when(str_detect(tanggal, "Januari") ~ str_replace(tanggal, "Januari","1"),
