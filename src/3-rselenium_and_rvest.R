@@ -16,6 +16,9 @@
 # RSelenium saat ini sudah tidak tersedia di repository CRAN akibat
 # akibat masalah instabilitas. Untuk tetap dapat menggunakannya, kita
 # dapat menginstall RSelenium dari github.
+# 
+# Pada proses penggunaan RSelenium, pastikan Java telah terinstall di
+# sistem operasi.
 
 # Import Packages -----
 
